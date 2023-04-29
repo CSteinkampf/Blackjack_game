@@ -4,19 +4,19 @@ dealer_names = ['David', 'Andrew', 'Frank', 'Jimothy', 'Bobert', 'Liam', 'Alfred
 class Player:
     def __init__(self, name, age, chips=100):
         self.name = name
-        self.age = age
         self.chips = chips
-        self.hand = {}
-        self.second_hand = {}
+        self.hand = []
         self.wager = 0
 
     def look_at_hand(self):
+        if self.hand == []:
+            return "There are no cards in your hand."
+
         cards_in_hand = "The cards in your hand are a "
 
-        for key, value in self.hand.items():
-            for x in value:
-                cards_in_hand += f"{x} of {key}, "
-
+        for item in self.hand:
+            cards_in_hand += item = ", "
+           
         cards_in_hand = cards_in_hand[:-2]
         cards_in_hand += "."
         return cards_in_hand
@@ -24,19 +24,44 @@ class Player:
     def pick_ace(self):
         player_choice = input("You have been dealt an ace! You need to decide if you want the value of this card to be 1 or 11. Press 1 for 1, or 2 for 11")
         while answer_set == 0:
-        if player_choice == 1:
-            answer_set = 1
-        elif player_choice == 2:
-            answer_set = 1
-        else:
-            player_choice = input("That wasn't quite right, You need to decide if you want the value of this card to be 1 or 11. Press 1 for 1, or 2 for 11")
+            if player_choice == "1":
+                answer_set = 1
+                ace_value = 1
+            elif player_choice == "2":
+                answer_set = 1
+                ace_value = 11
+            else:
+                player_choice = input("That wasn't quite right, You need to decide if you want the value of this card to be 1 or 11. Press 1 for 1, or 2 for 11")
+        return ace_value
+
+    def number_check(self, num_guess):
+        for char in num_guess:
+            if char not in "-0123456789":
+                return False
+        return True
+    
+    def get_num(self, text):
+        num_guess = input(text)
+        while not self.number_check(num_guess):
+           num_guess = input("That wasn't a valid number, please try again.")
+        return int(num_guess)
+    
+    def acceptable_wager(self, wager):
+        while self.get_num(wager) > self.chips:
+            wager = self.get_num(f"You don't have enough chips for a wager that high, you have {self.chips} chips. Please enter the number of chips you would like to wager.")
+        return wager
 
     def place_wager(self):
-        wager = input("Please place your bet now! Type a the number of chips you would like you wager.")
-       
+        wager = self.get_num("Please place your bet now! Type a the number of chips you would like you wager.")
+        while self.acceptable_wager(wager) <= 0:
+            wager = self.get_num("Please enter a wager above 0 chips.")
+        self.wager = wager
+          
 class Dealer:
     def __init__(self, name):
         self.name = name
+        self.dealer_hand = []
+        self.table_earnings = 0
 
 class Card:
     def __init__(self, name, value, suit):
@@ -44,74 +69,67 @@ class Card:
         self.value = value
         self.suit = suit
 
+    def __str__(self):
+        return f"{self.name} of {self.suit}, worth {self.value} points"
+
 class Deck:
     def __init__(self):
-        #hearts
-        self.hearts_a = Card("ace", 1, "hearts")
-        self.hearts_k = Card("king", 10, "hearts")
-        self.hearts_q = Card("queen", 10, "hearts")
-        self.hearts_j = Card("jack", 10, "hearts")
-        self.hearts_10 = Card("ten", 10, "hearts")
-        self.hearts_9 = Card("nine", 9, "hearts")
-        self.hearts_8 = Card("eight", 8, "hearts")
-        self.hearts_7 = Card("seven", 7, "hearts")
-        self.hearts_6 = Card("six", 6, "hearts")
-        self.hearts_5 = Card("five", 5, "hearts")
-        self.hearts_4 = Card("four", 4, "hearts")
-        self.hearts_3 = Card("three", 3, "hearts")
-        self.hearts_2 = Card("two", 2, "hearts")
-        #spades
-        self.spades_a = Card("ace", 1, "spades")
-        self.spades_k = Card("king", 10, "spades")
-        self.spades_q = Card("queen", 10, "spades")
-        self.spades_j = Card("jack", 10, "spades")
-        self.spades_10 = Card("ten", 10, "spades")
-        self.spades_9 = Card("nine", 9, "spades")
-        self.spades_8 = Card("eight", 8, "spades")
-        self.spades_7 = Card("seven", 7, "spades")
-        self.spades_6 = Card("six", 6, "spades")
-        self.spades_5 = Card("five", 5, "spades")
-        self.spades_4 = Card("four", 4, "spades")
-        self.spades_3 = Card("three", 3, "spades")
-        self.spades_2 = Card("two", 2, "spades")
-        #diamonds
-        self.diamonds_a = Card("ace", 1, "diamonds")
-        self.diamonds_k = Card("king", 10, "diamonds")
-        self.diamonds_q = Card("queen", 10, "diamonds")
-        self.diamonds_j = Card("jack", 10, "diamonds")
-        self.diamonds_10 = Card("ten", 10, "diamonds")
-        self.diamonds_9 = Card("nine", 9, "diamonds")
-        self.diamonds_8 = Card("eight", 8, "diamonds")
-        self.diamonds_7 = Card("seven", 7, "diamonds")
-        self.diamonds_6 = Card("six", 6, "diamonds")
-        self.diamonds_5 = Card("five", 5, "diamonds")
-        self.diamonds_4 = Card("four", 4, "diamonds")
-        self.diamonds_3 = Card("three", 3, "diamonds")
-        self.diamonds_2 = Card("two", 2, "diamonds")
-        #clubs
-        self.clubs_a = Card("ace", 1, "clubs")
-        self.clubs_k = Card("king", 10, "clubs")
-        self.clubs_q = Card("queen", 10, "clubs")
-        self.clubs_j = Card("jack", 10, "clubs")
-        self.clubs_10 = Card("ten", 10, "clubs")
-        self.clubs_9 = Card("nine", 9, "clubs")
-        self.clubs_8 = Card("eight", 8, "clubs")
-        self.clubs_7 = Card("seven", 7, "clubs")
-        self.clubs_6 = Card("six", 6, "clubs")
-        self.clubs_5 = Card("five", 5, "clubs")
-        self.clubs_4 = Card("four", 4, "clubs")
-        self.clubs_3 = Card("three", 3, "clubs")
-        self.clubs_2 = Card("two", 2, "clubs")
+        card_name = {"ace": 1, "king": 10, "queen": 10, "jack": 10, "ten": 10, "nine": 9, "eight": 8, "seven": 7, "six": 6, "five": 5, "four": 4, "three": 3, "two": 2}
+        card_suits = ["hearts", "diamonds", "clubs", "spades"]
 
-class Stack:
-    def __init__(self) -> None:
-        pass
+        self.the_deck = []
+
+        for suit in card_suits:
+            for name, value in card_name.items():
+                self.the_deck.append(Card(name, value, suit))
+
+    def deck_list(self):
+        for card in self.the_deck:
+            print(card) 
+
+    def shuffle_deck(self):
+        random.shuffle(self.the_deck)
 
 class Play_game:
-    def __init__(self) -> None:
+    def __init__(self):
+        self.player = Player("")
+        self.dealer = Dealer(random.choice(dealer_names))
+        self.table_deck = Deck()
+        self.table_deck.shuffle_deck()
+        self.round_num = 1
+
+    def game_start(self):
+        self.player.name = input(f"Hello and welcome to Blackjack! This is your dealer {self.dealer.name}, what is your name? /n")
+        player_selection = input(f"Welcome to the table {self.player.name}! Would you like to get playing right away? Type Y for yes, and N for no. /n")
+        player_selection = player_selection.upper()
+        if player_selection == "Y":
+            self.play_game()
+        elif player_selection == "N":
+            return "Alright, see you soon!"
+        else:
+            player_selection = input("That wasn't one of our options. Type Y for yes, and N for no. /n")
+
+    def play_game(self):
         pass
 
-    play_round
+    def play_round(self):
+        pass
+
+    def hit(self):
+        pass
+
+    def double_down(self):
+        pass
+
+    def split(self):
+        pass
+
+    def surrender(self):
+        pass
+
+    def payout(self):
+        pass
 
 
-the_deck = Deck()
+
+
