@@ -130,10 +130,19 @@ class Play_game:
         if player_hand_value > 21:
             self.payout("dealer")
         elif player_hand_value == 21:
-
-
+            pass
 
         print(f"The dealer has finished dealing the cards. The dealers face up card is a {self.dealer.dealer_hand[0]}, what would you like to do? ")
+
+    def dealer_hand_check(self):
+        has_ace = False
+        for card in self.dealer.dealer_hand:
+            has_ace += card.name == 'ace'
+
+        if has_ace:
+            print('There is an ace')
+        else:
+            pass
 
     def player_hand_check(self):
         hand_value = 0
@@ -195,7 +204,28 @@ class Play_game:
             self.player.chips += self.player.wager
             self.player.wager = 0
         
+def main():
+    game = Play_game()
+    while playing_game == True:
+        print(f"Welcome to round {game.round_num} of Blackjack.")
+        game.player.place_wager()
 
+        print("Now that all wagers have been placed we will deal the first hand.")
+        for card in range(2):
+            game.deal_card(game.player.hand)
+            game.deal_card(game.dealer.dealer_hand)
+
+        player_hand_value = game.player_hand_check()
+
+        #check dealer hand value.
+
+        if player_hand_value > 21:
+            game.payout("dealer")
+        elif player_hand_value == 21:
+            pass
+
+        print(f"The dealer has finished dealing the cards. The dealers face up card is a {self.dealer.dealer_hand[0]}, what would you like to do? ")
+        
 
 
 
