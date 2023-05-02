@@ -134,16 +134,25 @@ class Play_game:
 
         print(f"The dealer has finished dealing the cards. The dealers face up card is a {self.dealer.dealer_hand[0]}, what would you like to do? ")
 
-    def dealer_hand_check(self):
+    def dealer_hand_value(self):
         has_ace = False
+        hand_value = 0
+
         for card in self.dealer.dealer_hand:
-            has_ace += card.name == 'ace'
-
-        if has_ace:
-            print('There is an ace')
-        else:
-            pass
-
+            has_ace += card.name == "ace"
+            if card.name == "ace":
+                card.value = 11
+            hand_value += card.value
+        
+        while has_ace == True:
+            if hand_value >= 7:
+                for card in self.dealer.dealer_hand:
+                    if card.name == "ace":
+                        card.value = 11
+            elif has_ace == True and hand_value < 7:
+                pass
+        return hand_value
+        
     def player_hand_check(self):
         hand_value = 0
         for card in self.player.hand:
@@ -206,7 +215,11 @@ class Play_game:
         
 def main():
     game = Play_game()
-    while playing_game == True:
+
+    while playing_game:
+        playing_game = True
+        dealer_hand_value = 0
+
         print(f"Welcome to round {game.round_num} of Blackjack.")
         game.player.place_wager()
 
@@ -217,14 +230,22 @@ def main():
 
         player_hand_value = game.player_hand_check()
 
-        #check dealer hand value.
+        for card in game.dealer.dealer_hand:
+            if card.name == "ace":
+                card.value = 11
+            dealer_hand_value += card.value
 
-        if player_hand_value > 21:
+        if player_hand_value == 21 and dealer_hand_value == 21:
+            print("A push has occured and both you and the dealer have Blackjack!")
+            game.payout("draw")
+        elif player_hand_value == 21 and dealer_hand_value != 21:
+            print(f"You have won a natural! You have earned {game.player.wager * 1.5} Your blackjack beat the dealers hand worth {dealer_hand_value}")
+            game.payout("natural")
+        elif player_hand_value < 21 and dealer_hand_value == 21:
+            print(f"The dealer has beaten your hand worth {player_hand_value} with their Blackjack.")
             game.payout("dealer")
-        elif player_hand_value == 21:
-            pass
 
-        print(f"The dealer has finished dealing the cards. The dealers face up card is a {self.dealer.dealer_hand[0]}, what would you like to do? ")
+        print(f"The dealer has finished dealing the cards. The dealers face up card is a {game.dealer.dealer_hand[0]}, what would you like to do?")
         
 
 
