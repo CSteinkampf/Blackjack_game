@@ -7,6 +7,7 @@ class Player:
         self.chips = chips
         self.hand = []
         self.wager = 0
+        self.player_hand_value = 0
 
     def look_at_hand(self):
         if self.hand == []:
@@ -63,6 +64,20 @@ class Dealer:
         self.name = name
         self.dealer_hand = []
         self.table_earnings = 0
+        self.dealer_hand_value = 0
+
+    def dealer_hand(self):
+        if self.hand == []:
+            return "The dealer hasn't dealt the cards yet."
+
+        cards_in_hand = f"The dealer's cards are a "
+
+        for item in self.dealer_hand:
+            cards_in_hand += item = ", "
+           
+        cards_in_hand = cards_in_hand[:-2]
+        cards_in_hand += "."
+        return cards_in_hand
 
 class Card:
     def __init__(self, name, value, suit):
@@ -160,6 +175,14 @@ class Play_game:
                 card.value = self.player.pick_ace()
             hand_value += card.value
         return hand_value
+    
+    def second_hand_check(self):
+        hand_value = 0
+        for card in self.second_hand.hand:
+            if card.name == "ace":
+                card.value = self.second_hand.pick_ace()
+            hand_value += card.value
+        return hand_value
 
     def deal_card(self, card_receiver):
         card_receiver.append(self.table_deck.the_deck.pop(0))
@@ -178,7 +201,7 @@ class Play_game:
         self.play_game()
 
     def double_down(self):
-        if self.player.chips > self.player.wager:
+        if self.player.chips > self.player.wager and self.player.player_hand_value in range(9, 12):
             self.player.wager = self.player.wager * 2
             return True
         else:
@@ -216,9 +239,11 @@ class Play_game:
 def main():
     game = Play_game()
 
+    #ADD GAME SETUP
+
     while playing_game:
         playing_game = True
-        dealer_hand_value = 0
+        game.dealer.dealer_hand_value = 0
 
         print(f"Welcome to round {game.round_num} of Blackjack.")
         game.player.place_wager()
@@ -228,25 +253,122 @@ def main():
             game.deal_card(game.player.hand)
             game.deal_card(game.dealer.dealer_hand)
 
-        player_hand_value = game.player_hand_check()
+        game.player.player_hand_value = game.player_hand_check()
 
         for card in game.dealer.dealer_hand:
             if card.name == "ace":
                 card.value = 11
-            dealer_hand_value += card.value
+            game.dealer.dealer_hand_value += card.value
 
-        if player_hand_value == 21 and dealer_hand_value == 21:
+        if game.player.player_hand_value == 21 and game.dealer.dealer_hand_value == 21:
             print("A push has occured and both you and the dealer have Blackjack!")
             game.payout("draw")
-        elif player_hand_value == 21 and dealer_hand_value != 21:
-            print(f"You have won a natural! You have earned {game.player.wager * 1.5} Your blackjack beat the dealers hand worth {dealer_hand_value}")
+        elif game.player.player_hand_value == 21 and game.dealer.dealer_hand_value != 21:
+            print(f"You have won a natural! You have earned {game.player.wager * 1.5} Your blackjack beat the dealers hand worth {game.dealer.dealer_hand_value}")
             game.payout("natural")
-        elif player_hand_value < 21 and dealer_hand_value == 21:
-            print(f"The dealer has beaten your hand worth {player_hand_value} with their Blackjack.")
+        elif game.player.player_hand_value < 21 and game.dealer.dealer_hand_value == 21:
+            print(f"The dealer has beaten your hand worth {game.player.player_hand_value} with their Blackjack.")
             game.payout("dealer")
 
         print(f"The dealer has finished dealing the cards. The dealers face up card is a {game.dealer.dealer_hand[0]}, what would you like to do?")
         
+        while player_turn:
+            player_turn = True
+            cards_in_hand = 2
+            split_selection = 0
+
+            game.player.look_at_hand()
+
+            player_selection = input("Press 1 to stand, 2 to hit, 3 to double down (if card value is 9, 10 or 11), or 4 to split (only if you have two of the same card!)")
+            if player_selection == "1":
+                player_turn = False
+                
+            elif player_selection == "2":
+                game.deal_card(game.player.hand)
+                for card in game.player.hand[-1]:
+                    if card.name == "ace":
+                        game.player.pick_ace()
+                    game.player.player_hand_value += card.value
+                cards_in_hand += 1
+
+            elif player_selection == "3":
+                double_down_state = game.double_down()
+                if double_down_state == True:
+                    game.deal_card(game.player.hand)
+                    game.player.player_hand_value = game.player_hand_check()
+                    player_turn = False
+                else: 
+                    return "looks like your cards don't have the right value to double down, try another option."
+
+            elif player_selection == "4":
+                if split_selection > 0:
+                    return "You've already split this round, try another option."
+                game.split
+                split_state = game.split()
+                if split_state == True:
+                    game.deal_card(game.player.hand)
+                    game.deal_card(game.second_hand.hand)
+                    game.player.player_hand_value = game.player_hand_check()
+                    split_selection += 1
+                else:
+                    return "looks like your cards don't match so you can't split, try another option."
+
+            else:
+                print("That wasn't a correct input.")
+
+            if game.player.player_hand_value > 21:
+                player_turn = False
+                
+        if game.player.player_hand_value > 21:
+            game.payout("dealer")
+            print(f"Oh no! Your hand value is {game.player.player_hand_value}, which means you have bust and lost your bet.")
 
 
+        while second_hand_turn and len(game.second_hand.hand) > 0:
+            second_hand_turn = True
+            cards_in_hand = 2
+            game.second_hand.player_hand_value = game.second_hand_check()
+
+            game.second_hand.look_at_hand()
+            player_selection = input("This is the second hand from your split! Press 1 to stand, 2 to hit.")
+
+            if player_selection == "1":
+                second_hand_turn = False
+                
+            elif player_selection == "2":
+                game.deal_card(game.second_hand.hand)
+                for card in game.second_hand.hand[-1]:
+                    if card.name == "ace":
+                        game.second_hand.pick_ace()
+                    game.second_hand.player_hand_value += card.value
+            
+            cards_in_hand += 1
+
+            if game.second_hand.player_hand_value > 21:
+                second_hand_turn = False
+
+        if game.second_hand.player_hand_value > 21:
+            game.payout("dealer")
+            print(f"Oh no! Your hand value is {game.player.player_hand_value}, which means you have bust and lost your bet.")
+
+        print("Okay it is the dealers turn.")
+        game.dealer.dealer_hand()
+
+        while dealer_turn == True:
+            dealer_turn = True
+            game.deal_card(game.dealer.dealer_hand)
+            for card in game.dealer.dealer_hand[-1]:
+                game.dealer.dealer_hand_value += card.value
+            if game.dealer.dealer_hand_value > 21 and card.name == "ace":
+                card.value = 1
+                game.dealer.dealer_hand_value -= 10
+            if game.dealer.dealer_hand_value > 17:
+                dealer_turn = False
+            
+        if game.dealer.dealer_hand_value > 21:
+            game.payout("player")
+            return f"the dealer has bust with a hand value of {game.dealer.dealer_hand_value}, and you have won the round!"
+        
+        print("Alright let's compare hands!")
+        
 
