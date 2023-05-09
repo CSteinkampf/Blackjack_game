@@ -16,13 +16,16 @@ class Player:
         cards_in_hand = "The cards you have been dealt are a "
 
         for item in self.hand:
-            cards_in_hand += item + ", "
+            cards_in_hand += item
+            cards_in_hand += ", "
            
         cards_in_hand = cards_in_hand[:-2]
         cards_in_hand += "."
         return cards_in_hand
     
     def pick_ace(self):
+        answer_set = 0
+
         player_choice = input("You have been dealt an ace! You need to decide if you want the value of this card to be 1 or 11. Press 1 for 1, or 2 for 11")
         while answer_set == 0:
             if player_choice == "1":
@@ -44,18 +47,18 @@ class Player:
     def get_num(self, text):
         num_guess = input(text)
         while not self.number_check(num_guess):
-           num_guess = input("That wasn't a valid number, please try again.")
+           num_guess = input("That wasn't a valid number, please try again.\n")
         return int(num_guess)
     
     def acceptable_wager(self, wager):
         while self.get_num(wager) > self.chips:
-            wager = self.get_num(f"You don't have enough chips for a wager that high, you have {self.chips} chips. Please enter the number of chips you would like to wager.")
+            wager = self.get_num(f"You don't have enough chips for a wager that high, you have {self.chips} chips. Please enter the number of chips you would like to wager.\n")
         return wager
 
     def place_wager(self):
-        wager = self.get_num("Please place your bet now! Type a the number of chips you would like you wager.")
+        wager = self.get_num("Please place your bet now! Type a the number of chips you would like you wager.\n")
         while self.acceptable_wager(wager) <= 0:
-            wager = self.get_num("Please enter a wager above 0 chips.")
+            wager = self.get_num("Please enter a wager above 0 chips.\n")
         self.wager = wager
         self.chips -= wager
           
@@ -116,15 +119,15 @@ class Play_game:
         self.round_num = 1
 
     def game_start(self):
-        self.player.name = input(f"Hello and welcome to Blackjack! This is your dealer {self.dealer.name}, what is your name? /n")
-        player_selection = input(f"Welcome to the table {self.player.name}! If you would like a reminder of the rules of Blackjack? please type Y for the rules, or if you would rather jump right into the game, type N.")
+        self.player.name = input(f"Hello and welcome to Blackjack! This is your dealer {self.dealer.name}, what is your name? \n")
+        player_selection = input(f"Welcome to the table {self.player.name}! If you would like a reminder of the rules of Blackjack? please type \"y\" for the rules, or if you would rather jump right into the game, type \"n\".\n")
         player_selection = player_selection.upper()
         if player_selection == "Y":
             self.game_rules()
         elif player_selection == "N":
             pass
         else:
-            player_selection = input("That wasn't one of our options. Type Y for yes, and N for no. /n")
+            player_selection = input("That wasn't one of our options. Type Y for yes, and N for no. \n")
 
 #Can be deleted, unused
     def play_game(self):
@@ -190,6 +193,8 @@ class Play_game:
         card_receiver.append(self.table_deck.the_deck.pop(0))
 
     def game_rules(self):
+        game_rules = ""
+
         while game_rules == "":
             game_rules = input("Blackjack is a betting game against the dealer. \nBefore the deal begins, each player places a bet of chips. When all the players have placed their bets, the dealer gives one card face up to each player in rotation clockwise, and then one card face up to themselves. Another round of cards is then dealt face up to each player, but the dealer takes the second card face down. Thus, each player except the dealer receives two cards face up, and the dealer receives one card face up and one card face down. \nPress enter to move on to the next section, or type anything to quit the tutorial.")
             game_rules = input("Naturals. \nIf a player's first two cards are an ace and a \"ten-card\" (a picture card or 10), giving a count of 21 in two cards, this is a natural or \"blackjack.\" If any player has a natural and the dealer does not, the dealer immediately pays that player one and a half times the amount of their bet. If the dealer has a natural, they immediately collect the bets of all players who do not have naturals, (but no additional amount). If the dealer and another player both have naturals, the bet of that player is a stand-off (a tie), and the player takes back his chips. \nPress enter to move on to the next section, or type anything to quit the tutorial.")
@@ -278,15 +283,15 @@ class Play_game:
        
 def main():
     game = Play_game()
+    playing_game = True
 
     game.game_start()
 
     while playing_game:
-        playing_game = True
+        playing_round = True
 
         while playing_round:
-            playing_round = True
-
+            player_turn = True
             game.dealer.dealer_hand_value = 0
 
             print(f"Welcome, {game.player.name}, to round {game.round_num} of Blackjack.")
@@ -320,7 +325,6 @@ def main():
             print(f"The dealer has finished dealing the cards. The dealers face up card is a {game.dealer.dealer_hand[0]}, what would you like to do?")
             
             while player_turn:
-                player_turn = True
                 cards_in_hand = 2
                 split_selection = 0
 
@@ -447,6 +451,5 @@ def main():
         else:
             continue_playing = input("Something went wrong with your answer, please type \"y\" to play another round, or \"n\" to stop playing.")
 
-
-            
+main()      
 
