@@ -109,6 +109,12 @@ class Deck:
     def shuffle_deck(self):
         random.shuffle(self.the_deck)
 
+    def reset_deck(self):
+        for card in self.the_deck:
+            if card.name == "ace":
+                card.value = 1
+        self.shuffle_deck()
+
 class Play_game:
     def __init__(self):
         self.player = Player("")
@@ -193,18 +199,17 @@ class Play_game:
         card_receiver.append(self.table_deck.the_deck.pop(0))
 
     def game_rules(self):
-        game_rules = ""
+        rules_position = 0
+        the_rules = ["Blackjack is a betting game against the dealer. \nBefore the deal begins, each player places a bet of chips. When all the players have placed their bets, the dealer gives one card face up to each player in rotation clockwise, and then one card face up to themselves. Another round of cards is then dealt face up to each player, but the dealer takes the second card face down. Thus, each player except the dealer receives two cards face up, and the dealer receives one card face up and one card face down. \nPress enter to move on to the next section, or type anything to quit the tutorial.", "Naturals. \nIf a player's first two cards are an ace and a \"ten-card\" (a picture card or 10), giving a count of 21 in two cards, this is a natural or \"blackjack.\" If any player has a natural and the dealer does not, the dealer immediately pays that player one and a half times the amount of their bet. If the dealer has a natural, they immediately collect the bets of all players who do not have naturals, (but no additional amount). If the dealer and another player both have naturals, the bet of that player is a stand-off (a tie), and the player takes back his chips. \nPress enter to move on to the next section, or type anything to quit the tutorial.", "The Play. \nThe player to the left goes first and must decide whether to \"stand\" (not ask for another card) or \"hit\" (ask for another card in an attempt to get closer to a count of 21, or even hit 21 exactly). Thus, a player may stand on the two cards originally dealt to them, or they may ask the dealer for additional cards, one at a time, until deciding to stand on the total (if it is 21 or under), or goes \"bust\" (if it is over 21). In the latter case, the player loses and the dealer collects the bet wagered. The dealer then turns to the next player to their left and serves them in the same manner. \nPress enter to move on to the next section, or type anything to quit the tutorial.", "The Dealers Play. \nWhen the dealer has served every player, the dealers face-down card is turned up. If the total is 17 or more, it must stand. If the total is 16 or under, they must take a card. The dealer must continue to take cards until the total is 17 or more, at which point the dealer must stand. If the dealer has an ace, and counting it as 11 would bring the total to 17 or more (but not over 21), the dealer must count the ace as 11 and stand. The dealer's decisions, then, are automatic on all plays, whereas the player always has the option of taking one or more cards. \nPress enter to move on to the next section, or type anything to quit the tutorial.", "The Dealers Play. \nWhen the dealer has served every player, the dealers face-down card is turned up. If the total is 17 or more, it must stand. If the total is 16 or under, they must take a card. The dealer must continue to take cards until the total is 17 or more, at which point the dealer must stand. If the dealer has an ace, and counting it as 11 would bring the total to 17 or more (but not over 21), the dealer must count the ace as 11 and stand. The dealer's decisions, then, are automatic on all plays, whereas the player always has the option of taking one or more cards. \nPress enter to move on to the next section, or type anything to quit the tutorial.", "Splitting Pairs. \nIf a player's first two cards are of the same denomination, such as two jacks or two sixes, they may choose to treat them as two separate hands when their turn comes around. The amount of the original bet then goes on one of the cards, and an equal amount must be placed as a bet on the other card. The player first plays the hand to their left by standing or hitting one or more times; only then is the hand to the right played. The two hands are thus treated separately, and the dealer settles with each on its own merits. \nPress enter to move on to the next section, or type anything to quit the tutorial.", "Doubling Down \nAnother option open to the player is doubling their bet when the original two cards dealt total 9, 10, or 11. When the player's turn comes, they place a bet equal to the original bet, and the dealer gives the player just one card, which is placed face down and is not turned up until the bets are settled at the end of the hand. With two fives, the player may split a pair, double down, or just play the hand in the regular way. Note that the dealer does not have the option of splitting or doubling down. \nPress enter to move on to the next section, or type anything to quit the tutorial.", "Settlement \nA bet once paid and collected is never returned. Thus, one key advantage to the dealer is that the player goes first. If the player goes bust, they have already lost their wager, even if the dealer goes bust as well. If the dealer goes over 21, the dealer pays each player who has stood the amount of that player's bet. If the dealer stands at 21 or less, the dealer pays the bet of any player having a higher total (not exceeding 21) and collects the bet of any player having a lower total. If there is a stand-off (a player having the same total as the dealer), no chips are paid out or collected. \nPress enter to move on to the next section, or type anything to quit the tutorial.", "This has been a tutorial on Blackjack, press enter to start playing!"]
 
-        while game_rules == "":
-            game_rules = input("Blackjack is a betting game against the dealer. \nBefore the deal begins, each player places a bet of chips. When all the players have placed their bets, the dealer gives one card face up to each player in rotation clockwise, and then one card face up to themselves. Another round of cards is then dealt face up to each player, but the dealer takes the second card face down. Thus, each player except the dealer receives two cards face up, and the dealer receives one card face up and one card face down. \nPress enter to move on to the next section, or type anything to quit the tutorial.")
-            game_rules = input("Naturals. \nIf a player's first two cards are an ace and a \"ten-card\" (a picture card or 10), giving a count of 21 in two cards, this is a natural or \"blackjack.\" If any player has a natural and the dealer does not, the dealer immediately pays that player one and a half times the amount of their bet. If the dealer has a natural, they immediately collect the bets of all players who do not have naturals, (but no additional amount). If the dealer and another player both have naturals, the bet of that player is a stand-off (a tie), and the player takes back his chips. \nPress enter to move on to the next section, or type anything to quit the tutorial.")
-            game_rules = input("The Play. \nThe player to the left goes first and must decide whether to \"stand\" (not ask for another card) or \"hit\" (ask for another card in an attempt to get closer to a count of 21, or even hit 21 exactly). Thus, a player may stand on the two cards originally dealt to them, or they may ask the dealer for additional cards, one at a time, until deciding to stand on the total (if it is 21 or under), or goes \"bust\" (if it is over 21). In the latter case, the player loses and the dealer collects the bet wagered. The dealer then turns to the next player to their left and serves them in the same manner. \nPress enter to move on to the next section, or type anything to quit the tutorial.")
-            game_rules = input("The Dealers Play. \nWhen the dealer has served every player, the dealers face-down card is turned up. If the total is 17 or more, it must stand. If the total is 16 or under, they must take a card. The dealer must continue to take cards until the total is 17 or more, at which point the dealer must stand. If the dealer has an ace, and counting it as 11 would bring the total to 17 or more (but not over 21), the dealer must count the ace as 11 and stand. The dealer's decisions, then, are automatic on all plays, whereas the player always has the option of taking one or more cards. \nPress enter to move on to the next section, or type anything to quit the tutorial.")
-            game_rules = input("Splitting Pairs. \nIf a player's first two cards are of the same denomination, such as two jacks or two sixes, they may choose to treat them as two separate hands when their turn comes around. The amount of the original bet then goes on one of the cards, and an equal amount must be placed as a bet on the other card. The player first plays the hand to their left by standing or hitting one or more times; only then is the hand to the right played. The two hands are thus treated separately, and the dealer settles with each on its own merits. \nPress enter to move on to the next section, or type anything to quit the tutorial.")
-            game_rules = input("Doubling Down \nAnother option open to the player is doubling their bet when the original two cards dealt total 9, 10, or 11. When the player's turn comes, they place a bet equal to the original bet, and the dealer gives the player just one card, which is placed face down and is not turned up until the bets are settled at the end of the hand. With two fives, the player may split a pair, double down, or just play the hand in the regular way. Note that the dealer does not have the option of splitting or doubling down. \nPress enter to move on to the next section, or type anything to quit the tutorial.")
-            game_rules = input("Settlement \nA bet once paid and collected is never returned. Thus, one key advantage to the dealer is that the player goes first. If the player goes bust, they have already lost their wager, even if the dealer goes bust as well. If the dealer goes over 21, the dealer pays each player who has stood the amount of that player's bet. If the dealer stands at 21 or less, the dealer pays the bet of any player having a higher total (not exceeding 21) and collects the bet of any player having a lower total. If there is a stand-off (a player having the same total as the dealer), no chips are paid out or collected. \nPress enter to move on to the next section, or type anything to quit the tutorial.")
-            game_rules = input("This has been a tutorial on Blackjack, press enter to start playing!")
-            game_rules = "Join Game"
+        while rules_position < 8:
+            print(the_rules[rules_position])
+            user_choice = ""
+            user_choice = input()
+            if user_choice == "":
+                rules_position += 1
+            else:
+                rules_position = 10
 
     def double_down(self):
         if self.player.chips > self.player.wager and self.player.player_hand_value in range(9, 12):
@@ -263,10 +268,10 @@ class Play_game:
         self.player.wager = 0
     
     def reset_deck(self):
-        self.return_player_cards
-        self.return_dealer_cards
-        self.return_second_hand_cards
-        self.table_deck.shuffle_deck
+        self.return_player_cards()
+        self.return_dealer_cards()
+        self.return_second_hand_cards()
+        self.table_deck.reset_deck()
 
     def return_player_cards(self):
         for value in range(0, len(self.player.hand)):
@@ -294,6 +299,7 @@ def main():
             player_turn = True
             game.dealer.dealer_hand_value = 0
 
+            #gamestart and wagers
             print(f"Welcome, {game.player.name}, to round {game.round_num} of Blackjack.")
             game.player.place_wager()
 
@@ -304,6 +310,7 @@ def main():
 
             game.player.player_hand_value = game.player_hand_check()
 
+            #dealer checks hand and if naturals occur they are resolved
             for card in game.dealer.dealer_hand:
                 if card.name == "ace":
                     card.value = 11
@@ -324,6 +331,7 @@ def main():
 
             print(f"The dealer has finished dealing the cards. The dealers face up card is a {game.dealer.dealer_hand[0]}, what would you like to do?")
             
+            #players turn
             while player_turn:
                 cards_in_hand = 2
                 split_selection = 0
