@@ -13,15 +13,16 @@ class Player:
         if self.hand == []:
             return "You haven't been dealt cards yet."
 
-        cards_in_hand = "The cards you have been dealt are a "
+        cards_in_hand = "The cards you have been dealt are a: "
 
         for item in self.hand:
-            cards_in_hand += item
-            cards_in_hand += ", "
+            current_card = item.__str__()
+            cards_in_hand += current_card
+            cards_in_hand += "; "
            
         cards_in_hand = cards_in_hand[:-2]
         cards_in_hand += "."
-        return cards_in_hand
+        print(cards_in_hand)
     
     def pick_ace(self):
         answer_set = 0
