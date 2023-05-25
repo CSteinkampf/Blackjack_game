@@ -42,6 +42,8 @@ class Player:
         for char in num_guess:
             if char not in "-0123456789":
                 return False
+        if num_guess == "":
+            return False
         return True
     
     def get_num(self, text):
@@ -50,15 +52,20 @@ class Player:
            num_guess = input("That wasn't a valid number, please try again.\n")
         return int(num_guess)
     
-    def acceptable_wager(self, wager):
-        while self.get_num(wager) > self.chips:
-            wager = self.get_num(f"You don't have enough chips for a wager that high, you have {self.chips} chips. Please enter the number of chips you would like to wager.\n")
-        return wager
+    def acceptable_wager(self, message):
+        chip_bet = self.get_num(message)
+        good_wager = False
+        while not good_wager:
+            if chip_bet > self.chips:
+                chip_bet = self.get_num(f"You don't have enough chips for a wager that high, you have {self.chips} chips. Please enter the number of chips you would like to wager.\n")
+            elif chip_bet < 0:
+                chip_bet = self.get_num("Please enter a wager above 0 chips.\n")
+            else:
+                good_wager = True
+        return chip_bet
 
     def place_wager(self):
-        wager = self.get_num("Please place your bet now! Type a the number of chips you would like you wager.\n")
-        while self.acceptable_wager(wager) <= 0:
-            wager = self.get_num("Please enter a wager above 0 chips.\n")
+        wager = self.acceptable_wager("Please place your bet now! Type the number of chips you would like you wager.\n")
         self.wager = wager
         self.chips -= wager
           
