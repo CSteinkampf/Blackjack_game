@@ -1,3 +1,14 @@
-this_list = [1,2,3,4,5]
+import os
+import time
 
-print(this_list[1])
+
+'''Printing coding ninjas five times'''
+print('Coding Ninjas!\n'*5)
+
+
+'''Sleep for 5 seconds after printing coding ninjas five times'''
+time.sleep(3)
+
+
+'''Clearing the Screen after 5 second halt '''
+os.system('clear')
