@@ -153,6 +153,7 @@ class Play_game:
         self.first_selection = True
         self.has_natural = True
         self.cards_in_hand = 0
+        self.player_turn_results = True
 
     def game_start(self):
         self.player.name = input(f"Hello and welcome to Blackjack! This is your dealer {self.dealer.name}, what is your name? \n")
@@ -370,8 +371,8 @@ class Play_game:
                 return
             
             print(f"The dealer has finished dealing the cards. The dealers face up card is a {self.dealer.dealer_hand[0]}, what would you like to do?")
-            player_turn_results = self.player_turn()
-            if not player_turn_results and not self.split_selection:
+            self.player_turn_results = self.player_turn()
+            if not self.player_turn_results and not self.split_selection:
                 return
             
             if self.split_selection:
@@ -394,17 +395,18 @@ class Play_game:
             
     def natural_check(self):
         if self.player.player_hand_value == 21 and self.dealer.dealer_hand_value == 21:
-            print("A push has occured and both you and the dealer have Blackjack!")
+            input("A push has occured and both you and the dealer have Blackjack!\nPress enter to continue.")
             self.draw(self.player.wager)
             return False
         elif self.player.player_hand_value == 21 and self.dealer.dealer_hand_value != 21:
-            print(f"You have won a natural! You have earned {self.player.wager * 1.5} chips! Your blackjack beat the dealers hand worth {self.dealer.dealer_hand_value}")
+            input(f"You have won a natural! You have earned {self.player.wager * 1.5} chips! Your blackjack beat the dealers hand worth {self.dealer.dealer_hand_value}!\nPress enter to continue.")
             self.natural()
             return False
         elif self.player.player_hand_value < 21 and self.dealer.dealer_hand_value == 21:
-            print(f"The dealer has beaten your hand worth {self.player.player_hand_value} with their Blackjack.")
+            input(f"The dealer has beaten your hand worth {self.player.player_hand_value} with their Blackjack.\nPress enter to continue.")
             self.dealer_win(self.player.wager)
             return False
+        return True
 
     def player_turn(self):
         self.is_player_turn = True
@@ -526,6 +528,8 @@ class Play_game:
 
 def main():
     game = Play_game()
+
+    os.system('cls' if os.name == 'nt' else 'clear')
 
     game.game_start()
     game.playing_game()
