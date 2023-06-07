@@ -1,7 +1,7 @@
 import random
 import os
 import time
-dealer_names = ['David', 'Andrew', 'Frank', 'Jimothy', 'Bobert', 'Liam', 'Alfred', 'Chris', 'Dale', 'Zerubbabel', 'Patrick', 'Chip', 'Edwardo', 'Piere', 'Robin', 'Linus', 'Chuck', 'Scott']
+dealer_names = ['David', 'Andrew', 'Frank', 'Jimothy', 'Bobert', 'Liam', 'Alfred', 'Chris', 'Dale', 'Patrick', 'Edwardo', 'Piere', 'Robin', 'Linus', 'Chuck', 'Scott']
 
 class Player:
     def __init__(self, name, chips=100):
@@ -65,7 +65,7 @@ class Player:
             if chip_bet > self.chips:
                 os.system('cls' if os.name == 'nt' else 'clear')
                 chip_bet = self.get_num(f"You don't have enough chips for a wager that high, you have {self.chips} chips. Please enter the number of chips you would like to wager.\n")
-            elif chip_bet < 0:
+            elif chip_bet < 1:
                 os.system('cls' if os.name == 'nt' else 'clear')
                 chip_bet = self.get_num("Please enter a wager above 0 chips.\n")
             else:
@@ -157,14 +157,14 @@ class Play_game:
 
     def game_start(self):
         self.player.name = input(f"Hello and welcome to Blackjack! This is your dealer {self.dealer.name}, what is your name? \n")
-        player_selection = input(f"Welcome to the table {self.player.name}! If you would like a reminder of the rules of Blackjack? please type \"y\" for the rules, or if you would rather jump right into the game, type \"n\".\n")
+        player_selection = input(f"Welcome to the table {self.player.name}! If you would like a reminder of the rules of Blackjack? please type \"y\" for the rules, or if you would rather jump right into the game, press enter.\n")
         player_selection = player_selection.upper()
         if player_selection == "Y":
             self.game_rules()
-        elif player_selection == "N":
+        elif player_selection == "":
             pass
         else:
-            player_selection = input("That wasn't one of our options. Type Y for yes, and N for no. \n")
+            player_selection = input("That wasn't one of our options. Type \"y\" for yes, or press enter to head into the game.\n")
 
     def dealer_hand_value(self):
         has_ace = False
@@ -322,7 +322,7 @@ class Play_game:
         while self.is_playing_game:
             self.playing_round()
 
-            continue_playing = input(f"That concludes round {self.round_num}, would you like to play another round? Type \"y\" for yes, or \"n\" for no.\n")
+            continue_playing = input(f"That concludes round {self.round_num}, would you like to play another round? Press enter to play another round, or type \"n\" to exit the game.\n")
             
             self.is_playing_game = self.new_round_selection(continue_playing)
             os.system('cls' if os.name == 'nt' else 'clear')
@@ -332,13 +332,13 @@ class Play_game:
        self.new_round_select = True
 
        while self.new_round_select:
-            if continue_input.lower() == "y":
+            if continue_input.lower() == "":
                 self.reset_game()
                 return True
             elif continue_input.lower() == "n":
                 return False
             else:
-                continue_input = input("Something went wrong with your answer, please type \"y\" to play another round, or \"n\" to stop playing.\n") 
+                continue_input = input("Something went wrong with your answer. Press enter to play another round, or type \"n\" to exit the game.\n") 
     
     def playing_round_setup(self):
         self.is_player_turn = True
@@ -538,6 +538,4 @@ def main():
     game.game_start()
     game.playing_game()
 
-
 main()      
-
