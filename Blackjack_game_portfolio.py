@@ -305,7 +305,7 @@ class Play_game:
 
     def win_check(self, hand_select, payout_select):
         if hand_select > self.dealer.dealer_hand_value:
-            print(f"Congradulations {self.player.name}! Your hand worth {hand_select} beat the dealers hand worth {self.dealer.dealer_hand_value}, and you won!")
+            print(f"Congratulations {self.player.name}! Your hand worth {hand_select} beat the dealers hand worth {self.dealer.dealer_hand_value}, and you won!")
             self.player_win(payout_select)
         elif hand_select == self.dealer.dealer_hand_value:
             print(f"Looks like this round was a draw. Both your hand and the dealers hand were worth {hand_select}.")
@@ -325,6 +325,8 @@ class Play_game:
             continue_playing = input(f"That concludes round {self.round_num}, would you like to play another round? Type \"y\" for yes, or \"n\" for no.\n")
             
             self.is_playing_game = self.new_round_selection(continue_playing)
+            os.system('cls' if os.name == 'nt' else 'clear')
+        print("Thanks for playing!")
 
     def new_round_selection(self, continue_input):
        self.new_round_select = True
@@ -334,14 +336,13 @@ class Play_game:
                 self.reset_game()
                 return True
             elif continue_input.lower() == "n":
-                print("Thanks for playing!")
                 return False
             else:
                 continue_input = input("Something went wrong with your answer, please type \"y\" to play another round, or \"n\" to stop playing.\n") 
     
     def playing_round_setup(self):
-        self.player_turn = True
-        self.second_hand_turn = True
+        self.is_player_turn = True
+        self.is_second_hand_turn = True
         self.dealer.dealer_hand_value = 0
         self.split_selection = 0
         self.player_bust = False
@@ -365,6 +366,8 @@ class Play_game:
             os.system('cls' if os.name == 'nt' else 'clear')
             self.init_card_deal()
             self.dealer_ace_value_check()
+            self.player.player_hand_value = self.player_hand_check()
+            os.system('cls' if os.name == 'nt' else 'clear')
             self.has_natural = self.natural_check()
 
             if not self.has_natural:
@@ -410,6 +413,7 @@ class Play_game:
 
     def player_turn(self):
         self.is_player_turn = True
+        self.player.player_hand_value = self.player_hand_check()
 
         while self.is_player_turn:
             self.cards_in_hand = 2
