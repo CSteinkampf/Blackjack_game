@@ -44,9 +44,14 @@ class Player:
         return ace_value
 
     def number_check(self, num_guess):
+        char_pos = 0
+
         for char in num_guess:
+            if char == "-" and char_pos != 0:
+                return False
             if char not in "-0123456789":
                 return False
+            char_pos += 1
         if num_guess == "":
             return False
         return True
@@ -95,9 +100,7 @@ class Player:
             else:
                 os.system('cls' if os.name == 'nt' else 'clear')
                 atm_selection = input("That wasn't a correct input. To go to the ATM and get more chips press enter, or press \"n\" to finish playing.\n").lower()
-
-
-          
+        
 class Dealer:
     def __init__(self, name):
         self.name = name
