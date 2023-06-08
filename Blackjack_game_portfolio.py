@@ -76,6 +76,27 @@ class Player:
         wager = self.acceptable_wager(f"Please place your bet now! Type the number of chips you would like you wager. You currently have {self.chips} chips.\n")
         self.wager = wager
         self.chips -= wager
+
+    def atm_machine(self):
+        player_choice = True
+        if self.chips > 0:
+            return True
+
+        while player_choice:
+            os.system('cls' if os.name == 'nt' else 'clear')
+            atm_selection = input("It looks like you have ran out of chips! To go to the ATM and get more chips press enter, or press \"n\" to finish playing.\n").lower()
+            
+            if atm_selection == "":
+                self.chips += 100
+                print(f"Thank you for your purchase! You now have {self.chips} chips.")
+                return True
+            elif atm_selection == "n":
+                return False
+            else:
+                os.system('cls' if os.name == 'nt' else 'clear')
+                atm_selection = input("That wasn't a correct input. To go to the ATM and get more chips press enter, or press \"n\" to finish playing.\n").lower()
+
+
           
 class Dealer:
     def __init__(self, name):
@@ -141,8 +162,6 @@ class Play_game:
         self.table_deck = Deck()
         self.table_deck.shuffle_deck()
         self.round_num = 1
-
-        #NEW VARIABLES
         self.is_playing_game = True
         self.is_playing_round = True
         self.new_round_select = True
@@ -314,12 +333,15 @@ class Play_game:
             print(f"Unfortunately your hand worth {hand_select} lost to the dealers hand worth {self.dealer.dealer_hand_value}. Better luck next time.")
             self.dealer_win(payout_select)
 
-    #NEW METHODS
     def playing_game(self):
         self.is_playing_game = True
         os.system('cls' if os.name == 'nt' else 'clear')
 
         while self.is_playing_game:
+            is_broke = self.player.atm_machine()
+            if not is_broke:
+                break
+
             self.playing_round()
 
             continue_playing = input(f"That concludes round {self.round_num}, would you like to play another round? Press enter to play another round, or type \"n\" to exit the game.\n")
