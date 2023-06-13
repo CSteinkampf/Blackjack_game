@@ -4,7 +4,7 @@ import time
 dealer_names = ['David', 'Andrew', 'Frank', 'Jimothy', 'Bobert', 'Liam', 'Alfred', 'Chris', 'Dale', 'Patrick', 'Edwardo', 'Piere', 'Robin', 'Linus', 'Chuck', 'Scott']
 
 class Player:
-    def __init__(self, name, chips=100):
+    def __init__(self, name="", chips=100):
         self.name = name
         self.chips = chips
         self.hand = []
@@ -109,7 +109,7 @@ class Dealer:
         self.dealer_hand_value = 0
     
     def dealer_dealt_cards(self):
-        if self.hand == []:
+        if self.dealer_hand == []:
             print("The dealer hasn't dealt the cards yet.")
             return
 
@@ -159,7 +159,7 @@ class Deck:
 
 class Play_game:
     def __init__(self):
-        self.player = Player("")
+        self.player = Player()
         self.second_hand = Player("second_hand", 0)
         self.dealer = Dealer(random.choice(dealer_names))
         self.table_deck = Deck()
@@ -258,7 +258,7 @@ class Play_game:
             if user_choice == "":
                 rules_position += 1
             else:
-                rules_position = 10
+                break
 
     def double_down(self):
         if self.player.chips > self.player.wager and self.player.player_hand_value in range(9, 12):
@@ -494,7 +494,7 @@ class Play_game:
             return
         
         split_state = self.split()
-        if split_state == True:
+        if split_state:
             self.deal_card(self.player.hand)
             self.deal_card(self.second_hand.hand)
             self.player.player_hand_value = self.player_hand_check()
