@@ -14,6 +14,10 @@
 # version 1.0
 # Built game and didn't use in editor documenting
 
+# 2023-06-13
+# version 1.1
+# Fixed naming error when player hit a new card for their hand
+
 #####################################################################"""
 
 import random
@@ -469,7 +473,7 @@ class PlayGame:
 
     def select_hit(self):
         self.deal_card(self.player.hand)
-        self.player.player_hand_value = self.player_hand_check()
+        self.player.player_hand_value = self.hand_check(self.player.hand, self.player.look_at_hand())
         self.cards_in_hand += 1
 
     def select_double_down(self):
