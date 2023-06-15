@@ -2,9 +2,13 @@ import random
 import os
 import time
 
-from .deck import Deck
+print("universal imports good")
+
+from deck import Deck
 from player import Player
 from dealer import Dealer
+
+print("spec imports good")
 
 dealer_names = ['David', 'Andrew', 'Frank', 'Jimothy', 'Bobert', 'Liam', 'Alfred', 'Chris', 'Dale', 'Patrick', 'Edwardo', 'Piere', 'Robin', 'Linus', 'Chuck', 'Scott', 'Johnald']
 

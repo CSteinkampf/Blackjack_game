@@ -24,6 +24,8 @@
 # import os
 # import time
 from libs.play_game import PlayGame
+
+"""############OLDCODE#################
 # dealer_names = ['David', 'Andrew', 'Frank', 'Jimothy', 'Bobert', 'Liam', 'Alfred', 'Chris', 'Dale', 'Patrick', 'Edwardo', 'Piere', 'Robin', 'Linus', 'Chuck', 'Scott', 'Johnald']
 
 # class Player:
@@ -556,6 +558,8 @@ from libs.play_game import PlayGame
 #         if not self.is_second_hand_turn:
 #             print("\nNow we will check the second hand against the dealer!")
 #             self.win_check(self.second_hand.player_hand_value, self.second_hand.wager)
+"""#######################
+
 
 def main():
     game = PlayGame()

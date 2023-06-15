@@ -25,3 +25,8 @@ class Deck:
             if card.name == "ace":
                 card.value = 1
         self.shuffle_deck()
+
+
+""" my_deck = Deck()
+my_deck.deck_setup()
+my_deck.deck_list() """
