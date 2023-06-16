@@ -1,6 +1,6 @@
 import random
 
-from card import Card
+from libs.card import Card
 
 class Deck:
     def __init__(self):
@@ -26,7 +26,3 @@ class Deck:
                 card.value = 1
         self.shuffle_deck()
 
-
-""" my_deck = Deck()
-my_deck.deck_setup()
-my_deck.deck_list() """

@@ -2,13 +2,9 @@ import random
 import os
 import time
 
-print("universal imports good")
-
-from deck import Deck
-from player import Player
-from dealer import Dealer
-
-print("spec imports good")
+from libs.the_deck import Deck
+from libs.player import Player
+from libs.dealer import Dealer
 
 dealer_names = ['David', 'Andrew', 'Frank', 'Jimothy', 'Bobert', 'Liam', 'Alfred', 'Chris', 'Dale', 'Patrick', 'Edwardo', 'Piere', 'Robin', 'Linus', 'Chuck', 'Scott', 'Johnald']
 
@@ -389,3 +385,5 @@ class PlayGame:
         if not self.is_second_hand_turn:
             print("\nNow we will check the second hand against the dealer!")
             self.win_check(self.second_hand.player_hand_value, self.second_hand.wager)
+
+
